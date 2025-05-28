@@ -4,7 +4,7 @@ import React from 'react';
 
 export async function POST(req: Request) {
   try {
-    const { results, email, chartImage } = await req.json();
+    const { results, email, chartImage, includeRawData } = await req.json();
 
     // Define styles
     const styles = StyleSheet.create({
@@ -32,7 +32,9 @@ export async function POST(req: Request) {
         React.createElement(Text, { style: { textAlign: 'center', fontSize: 18, marginBottom: 4, color: '#222' } }, `${results.score}%`),
         React.createElement(Text, { style: { textAlign: 'center', fontSize: 14, marginBottom: 12, color: '#666' } }, riskLabel),
         React.createElement(Text, { style: styles.label }, 'Results:'),
-        React.createElement(Text, { style: styles.content }, JSON.stringify(results, null, 2))
+        React.createElement(Text, { style: styles.content }, results.gptSummary),
+        includeRawData && React.createElement(Text, { style: styles.label }, 'Raw Data:'),
+        includeRawData && React.createElement(Text, { style: styles.content }, JSON.stringify(results.virusTotalData, null, 2))
       )
     );
 

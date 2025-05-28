@@ -50,9 +50,9 @@ export function ThreatInputForm({ onResults, onLoading }: ThreatInputFormProps) 
       return;
     }
 
-    // If not authenticated, redirect to sign in
+    // If not authenticated, show prompt
     if (!session) {
-      signIn();
+      setError('Please login or register an account.');
       return;
     }
 
