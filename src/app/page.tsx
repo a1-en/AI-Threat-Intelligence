@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 
 export default function Home() {
   const { data: session } = useSession();
-  const [results, setResults] = useState<any | null>(null);
+  const [results, setResults] = useState<{ virusTotalData: unknown; gptSummary: string; score: number } | null>(null);
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const loginSuccess = searchParams?.get('login');

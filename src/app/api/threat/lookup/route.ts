@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     await connectDB();
 
     // Get user and check daily limit
-    const userId = (session.user as any).id;
+    const userId = (session.user as { id: string }).id;
     if (!userId) {
       return NextResponse.json(
         { message: 'User ID not found in session' },
@@ -71,7 +71,7 @@ export async function POST(req: Request) {
 
     // Fetch data from VirusTotal (v3)
     let vtUrl = '';
-    let vtOptions = {
+    const vtOptions = {
       headers: {
         'x-apikey': process.env.VIRUSTOTAL_API_KEY || '',
       },

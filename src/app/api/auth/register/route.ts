@@ -47,7 +47,7 @@ export async function POST(request: Request) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Create new user
-    const user = await User.create({
+    await User.create({
       name,
       email,
       password: hashedPassword,
@@ -59,11 +59,11 @@ export async function POST(request: Request) {
       { message: 'User created successfully' },
       { status: 201 }
     );
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Registration error:', error);
     
     // Handle specific MongoDB errors
-    if (error.code === 11000) {
+    if (error instanceof Error && error.message.includes('E11000')) {
       return NextResponse.json(
         { message: 'Email already exists' },
         { status: 400 }

@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { useSession, signIn } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 type QueryType = 'ip' | 'domain' | 'hash' | 'url';
 
 interface ThreatInputFormProps {
-  onResults: (results: any) => void;
+  onResults: (results: { virusTotalData: unknown; gptSummary: string; score: number }) => void;
   onLoading: (loading: boolean) => void;
 }
 

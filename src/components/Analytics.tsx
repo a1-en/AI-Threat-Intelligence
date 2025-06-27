@@ -30,15 +30,23 @@ interface AnalyticsProps {
   userId: string;
 }
 
+type AnalyticsData = {
+  threatTrend: { labels: string[]; data: number[] };
+  threatTypes: { labels: string[]; data: number[] };
+  riskDistribution: number[];
+  totalThreats: number;
+  threatChange: number;
+  averageRiskScore: number;
+  riskChange: number;
+  uniqueSources: number;
+  sourcesChange: number;
+};
+
 export function Analytics({ userId }: AnalyticsProps) {
   const [timeRange, setTimeRange] = useState('7d');
-  const [analyticsData, setAnalyticsData] = useState<any>(null);
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchAnalytics();
-  }, [timeRange, userId]);
 
   const fetchAnalytics = async () => {
     try {
@@ -52,7 +60,7 @@ export function Analytics({ userId }: AnalyticsProps) {
         throw new Error(errorData.message || 'Failed to fetch analytics');
       }
       
-      const data = await response.json();
+      const data: AnalyticsData = await response.json();
       console.log('Analytics data received:', data);
       setAnalyticsData(data);
     } catch (error) {
@@ -62,6 +70,11 @@ export function Analytics({ userId }: AnalyticsProps) {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchAnalytics();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeRange, userId]);
 
   if (loading) {
     return (
@@ -221,20 +234,24 @@ export function Analytics({ userId }: AnalyticsProps) {
 
         <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
           <h3 className="text-lg font-semibold text-gray-200 mb-4">Threat Types</h3>
-          <Doughnut
-            data={threatTypeData}
-            options={{
-              responsive: true,
-              plugins: {
-                legend: {
-                  position: 'bottom',
-                  labels: {
-                    color: 'rgba(255, 255, 255, 0.7)',
+          {analyticsData.threatTypes.data.every((v) => v === 0) ? (
+            <div className="text-gray-400 text-center py-12">No threat type data available</div>
+          ) : (
+            <Doughnut
+              data={threatTypeData}
+              options={{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position: 'bottom',
+                    labels: {
+                      color: 'rgba(255, 255, 255, 0.7)',
+                    },
                   },
                 },
-              },
-            }}
-          />
+              }}
+            />
+          )}
         </div>
 
         <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">

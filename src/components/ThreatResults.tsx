@@ -11,12 +11,13 @@ import {
   CategoryScale,
   LinearScale,
 } from 'chart.js';
+import type { Chart as ChartJSInstance } from 'chart.js';
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale);
 
 interface ThreatResultsProps {
   results: {
-    virusTotalData: any;
+    virusTotalData: unknown;
     gptSummary: string;
     score: number;
   };
@@ -25,7 +26,7 @@ interface ThreatResultsProps {
 export function ThreatResults({ results }: ThreatResultsProps) {
   const { data: session } = useSession();
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-  const chartRef = useRef<any>(null);
+  const chartRef = useRef<ChartJSInstance<'doughnut'> | null>(null);
   const [includeRawData, setIncludeRawData] = useState(true);
 
   const chartData = {
@@ -50,8 +51,6 @@ export function ThreatResults({ results }: ThreatResultsProps) {
         const chartInstance = chartRef.current;
         if (chartInstance?.toBase64Image) {
           chartImage = chartInstance.toBase64Image();
-        } else if (chartInstance?.chart?.toBase64Image) {
-          chartImage = chartInstance.chart.toBase64Image();
         }
       }
       const response = await fetch('/api/report/generate', {
