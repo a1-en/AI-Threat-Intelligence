@@ -12,8 +12,14 @@ const lookupSchema = new mongoose.Schema({
   },
   queryType: {
     type: String,
-    enum: ['ip', 'domain', 'email', 'hash', 'url'],
+    enum: ['ip', 'domain', 'url', 'hash'],
     required: true,
+  },
+  score: {
+    type: Number,
+    required: true,
+    min: 0,
+    max: 100,
   },
   virusTotalData: {
     type: Object,

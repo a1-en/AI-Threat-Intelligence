@@ -124,28 +124,34 @@ export async function POST(req: Request) {
 
     const gptSummary = gptResponse.choices[0].message.content;
 
-    // Calculate threat score (example logic)
-    const positives = vtResponse.data.positives || 0;
-    const total = vtResponse.data.total || 1;
-    const score = (positives / total) * 100;
+    // Calculate threat score based on VirusTotal data
+    let score = 0;
+    if (vtResponse.data.data?.attributes?.last_analysis_stats) {
+      const stats = vtResponse.data.data.attributes.last_analysis_stats;
+      const total = stats.harmless + stats.suspicious + stats.malicious;
+      if (total > 0) {
+        score = Math.round((stats.suspicious * 0.5 + stats.malicious) / total * 100);
+      }
+    }
 
-    // Save lookup to database
+    // Store lookup in database
     const lookup = await Lookup.create({
-      userId: user._id,
+      userId,
       query,
       queryType,
+      score,
       virusTotalData: vtResponse.data,
       gptSummary,
     });
 
     return NextResponse.json({
+      score,
       virusTotalData: vtResponse.data,
       gptSummary,
-      score,
       lookupId: lookup._id,
     });
   } catch (error) {
-    console.error('Error in threat lookup:', error);
+    console.error('Threat lookup error:', error);
     return NextResponse.json(
       { message: 'Internal server error' },
       { status: 500 }

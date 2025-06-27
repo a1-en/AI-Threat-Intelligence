@@ -24,8 +24,27 @@ export default function Home() {
             <span>Welcome! You have successfully logged in.</span>
           </div>
         )}
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white drop-shadow-lg text-center mb-2">AI Threat Intelligence</h1>
-        <p className="text-gray-400 text-lg text-center mb-8">Analyze IPs, domains, emails, and hashes with AI-powered security</p>
+        <div className="w-full flex flex-col gap-2 mb-6">
+          <div className="flex flex-row items-center justify-between w-full">
+            <div className="flex-1 flex justify-center">
+              <h1 className="text-3xl md:text-5xl font-extrabold text-white drop-shadow-lg text-center">
+                AI Threat Intelligence
+              </h1>
+            </div>
+            <button
+              onClick={() => window.location.href = '/dashboard'}
+              className="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-lg transition-all duration-200 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 text-sm md:text-base"
+            >
+              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+              View Analytics
+            </button>
+          </div>
+          <p className="text-gray-400 text-base md:text-lg text-center mt-1">
+            Analyze IPs, domains, emails, and hashes with AI-powered security
+          </p>
+        </div>
         <div className="mb-8 text-center">
           {!session ? (
             <button
