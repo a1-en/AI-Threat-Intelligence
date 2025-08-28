@@ -3,10 +3,21 @@
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Analytics } from '@/components/Analytics';
+import { toast } from 'sonner';
+import { useEffect } from 'react';
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      toast.error('Please sign in to access the dashboard');
+      router.push('/auth/login');
+    } else if (status === 'authenticated' && session?.user?.id) {
+      toast.success('Welcome to your dashboard!');
+    }
+  }, [status, session, router]);
 
   if (status === 'loading') {
     return (

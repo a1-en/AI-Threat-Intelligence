@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -22,6 +23,7 @@ export default function ContactPage() {
       setSubmitStatus('success');
       setIsSubmitting(false);
       setFormData({ name: '', email: '', company: '', subject: '', message: '' });
+      toast.success('Message sent successfully! We\'ll get back to you within 24 hours.');
     }, 2000);
   };
 
@@ -79,7 +81,22 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
-
+      {/* Header */}
+      <div className="bg-gray-900/50 backdrop-blur-lg border-b border-gray-800">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex items-center justify-between">
+            <a href="/" className="text-2xl font-bold text-white hover:text-blue-400 transition-colors">
+              AI Threat Intelligence
+            </a>
+            <nav className="hidden md:flex space-x-8">
+              <a href="/features" className="text-gray-300 hover:text-white transition-colors">Features</a>
+              <a href="/pricing" className="text-gray-300 hover:text-white transition-colors">Pricing</a>
+              <a href="/about" className="text-gray-300 hover:text-white transition-colors">About</a>
+              <a href="/contact" className="text-blue-400 font-medium">Contact</a>
+            </nav>
+          </div>
+        </div>
+      </div>
 
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16 text-center">
@@ -129,7 +146,7 @@ export default function ContactPage() {
             
             {submitStatus === 'success' && (
               <div className="mb-8 p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-center">
-                                 Thank you for your message! We&apos;ll get back to you within 24 hours.
+                                  Thank you for your message! We&apos;ll get back to you within 24 hours.
               </div>
             )}
 

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { toast } from 'sonner';
 
 type QueryType = 'ip' | 'domain' | 'hash' | 'url';
 
@@ -46,17 +47,27 @@ export function ThreatInputForm({ onResults, onLoading }: ThreatInputFormProps) 
 
     // Input validation for type
     if (!validateInput()) {
-      setError('Please select the correct type for your input.');
+      const errorMsg = 'Please select the correct type for your input.';
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
     // If not authenticated, show prompt
     if (!session) {
-      setError('Please login or register an account.');
+      const errorMsg = 'Please login or register an account.';
+      setError(errorMsg);
+      toast.error(errorMsg, {
+        action: {
+          label: 'Sign In',
+          onClick: () => window.location.href = '/auth/login'
+        }
+      });
       return;
     }
 
     onLoading(true);
+    toast.loading('Analyzing threat...', { id: 'threat-analysis' });
 
     try {
       const response = await fetch('/api/threat/lookup', {
@@ -73,7 +84,9 @@ export function ThreatInputForm({ onResults, onLoading }: ThreatInputFormProps) 
       if (!response.ok) {
         const error = await response.json();
         if (response.status === 429) {
-          setError('You have reached your daily limit of 10 searches. Please try again tomorrow.');
+          const errorMsg = 'You have reached your daily limit of 10 searches. Please try again tomorrow.';
+          setError(errorMsg);
+          toast.error(errorMsg, { id: 'threat-analysis' });
           onLoading(false);
           return;
         }
@@ -82,8 +95,11 @@ export function ThreatInputForm({ onResults, onLoading }: ThreatInputFormProps) 
 
       const data = await response.json();
       onResults(data);
+      toast.success('Threat analysis completed successfully!', { id: 'threat-analysis' });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const errorMsg = err instanceof Error ? err.message : 'An error occurred';
+      setError(errorMsg);
+      toast.error(errorMsg, { id: 'threat-analysis' });
     } finally {
       onLoading(false);
     }

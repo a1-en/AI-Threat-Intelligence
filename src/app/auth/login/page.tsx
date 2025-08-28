@@ -4,6 +4,7 @@ import { useState, Suspense } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { toast } from 'sonner';
 
 function LoginContent() {
   const router = useRouter();
@@ -13,6 +14,11 @@ function LoginContent() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Show registration success toast
+  if (registered && !loading) {
+    toast.success('Registration successful! Please sign in.');
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,11 +34,15 @@ function LoginContent() {
 
       if (result?.error) {
         setError(result.error);
+        toast.error(result.error);
       } else {
-        router.push('/');
+        toast.success('Welcome back!');
+        router.push('/?login=success');
       }
     } catch {
-      setError('An error occurred during login');
+      const errorMsg = 'An error occurred during login';
+      setError(errorMsg);
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
