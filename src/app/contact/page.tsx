@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
+import Link from 'next/link';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -85,14 +86,14 @@ export default function ContactPage() {
       <div className="bg-gray-900/50 backdrop-blur-lg border-b border-gray-800">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
-            <a href="/" className="text-2xl font-bold text-white hover:text-blue-400 transition-colors">
+            <Link href="/" className="text-2xl font-bold text-white hover:text-blue-400 transition-colors">
               AI Threat Intelligence
-            </a>
+            </Link>
             <nav className="hidden md:flex space-x-8">
-              <a href="/features" className="text-gray-300 hover:text-white transition-colors">Features</a>
-              <a href="/pricing" className="text-gray-300 hover:text-white transition-colors">Pricing</a>
-              <a href="/about" className="text-gray-300 hover:text-white transition-colors">About</a>
-              <a href="/contact" className="text-blue-400 font-medium">Contact</a>
+              <Link href="/features" className="text-gray-300 hover:text-white transition-colors">Features</Link>
+              <Link href="/pricing" className="text-gray-300 hover:text-white transition-colors">Pricing</Link>
+              <Link href="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
+              <Link href="/contact" className="text-blue-400 font-medium">Contact</Link>
             </nav>
           </div>
         </div>
