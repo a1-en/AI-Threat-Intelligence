@@ -3,41 +3,15 @@
 import { useState, Suspense } from "react";
 import { ThreatInputForm } from "@/components/ThreatInputForm";
 import { ThreatResults } from "@/components/ThreatResults";
-import { useSession, signIn, signOut } from "next-auth/react";
+
 import { useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 
 function HomeContent() {
-  const { data: session } = useSession();
   const [results, setResults] = useState<{ virusTotalData: unknown; gptSummary: string; score: number } | null>(null);
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const loginSuccess = searchParams?.get('login');
-
-  const handleSignIn = () => {
-    toast.promise(
-      signIn(),
-      {
-        loading: 'Signing in...',
-        success: 'Welcome back!',
-        error: 'Failed to sign in'
-      }
-    );
-  };
-
-  const handleSignOut = () => {
-    toast.promise(
-      signOut({ 
-        callbackUrl: window.location.origin,
-        redirect: true 
-      }),
-      {
-        loading: 'Signing out...',
-        success: 'Signed out successfully',
-        error: 'Failed to sign out'
-      }
-    );
-  };
 
   return (
     <div className="w-full max-w-2xl flex flex-col items-center">
