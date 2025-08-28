@@ -62,7 +62,7 @@ export default function PricingPage() {
     }
   ];
 
-  const savings = billingCycle === 'yearly' ? 20 : 0;
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
@@ -177,7 +177,7 @@ export default function PricingPage() {
                 <p className="text-gray-400">Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately.</p>
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white mb-2">What's included in the free trial?</h3>
+                <h3 className="text-lg font-semibold text-white mb-2">What&apos;s included in the free trial?</h3>
                 <p className="text-gray-400">The free trial includes all features of the Professional plan for 14 days with no credit card required.</p>
               </div>
             </div>

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -89,7 +88,7 @@ export default function ContactPage() {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400"> Touch</span>
         </h1>
         <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-12">
-          Have questions about our platform? Need help with implementation? Want to discuss enterprise solutions? We're here to help.
+          Have questions about our platform? Need help with implementation? Want to discuss enterprise solutions? We&apos;re here to help.
         </p>
       </div>
 
@@ -130,7 +129,7 @@ export default function ContactPage() {
             
             {submitStatus === 'success' && (
               <div className="mb-8 p-4 rounded-lg bg-green-500/10 border border-green-500/20 text-green-400 text-center">
-                Thank you for your message! We'll get back to you within 24 hours.
+                                 Thank you for your message! We&apos;ll get back to you within 24 hours.
               </div>
             )}
 

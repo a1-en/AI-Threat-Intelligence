@@ -71,7 +71,7 @@ export default function AboutPage() {
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400"> Future</span>
         </h1>
         <p className="text-xl text-gray-400 max-w-4xl mx-auto mb-12">
-          We're a team of cybersecurity experts, AI researchers, and security professionals dedicated to making the internet safer through intelligent threat detection and prevention.
+          We&apos;re a team of cybersecurity experts, AI researchers, and security professionals dedicated to making the internet safer through intelligent threat detection and prevention.
         </p>
       </div>
 
@@ -96,7 +96,7 @@ export default function AboutPage() {
               In an increasingly connected world, cyber threats are becoming more sophisticated and frequent. Our mission is to democratize enterprise-grade threat intelligence by making AI-powered security accessible to organizations of all sizes.
             </p>
             <p className="text-lg text-gray-300 leading-relaxed">
-              We believe that every organization deserves the same level of protection that Fortune 500 companies have, and we're committed to making that vision a reality through innovative technology and unwavering dedication to security excellence.
+              We believe that every organization deserves the same level of protection that Fortune 500 companies have, and we&apos;re committed to making that vision a reality through innovative technology and unwavering dedication to security excellence.
             </p>
           </div>
         </div>
@@ -145,7 +145,7 @@ export default function AboutPage() {
               Our founders, having worked in both government cybersecurity and private sector security, recognized that the gap between enterprise and SMB security capabilities was growing wider. They set out to bridge this gap using the latest advances in artificial intelligence and machine learning.
             </p>
             <p>
-              Today, we're proud to serve hundreds of organizations worldwide, from small businesses to government agencies, helping them stay one step ahead of cyber threats through intelligent, automated security solutions.
+              Today, we&apos;re proud to serve hundreds of organizations worldwide, from small businesses to government agencies, helping them stay one step ahead of cyber threats through intelligent, automated security solutions.
             </p>
           </div>
         </div>
@@ -155,7 +155,7 @@ export default function AboutPage() {
       <div className="bg-gray-900/50 backdrop-blur-lg border-t border-gray-800">
         <div className="container mx-auto px-4 py-16 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">Join Us in Securing the Future</h2>
-          <p className="text-gray-400 mb-8">Be part of the solution to tomorrow's cybersecurity challenges</p>
+          <p className="text-gray-400 mb-8">Be part of the solution to tomorrow&apos;s cybersecurity challenges</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/auth/register"
