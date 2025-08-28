@@ -5,7 +5,6 @@ import { ThreatInputForm } from "@/components/ThreatInputForm";
 import { ThreatResults } from "@/components/ThreatResults";
 
 import { useSearchParams } from 'next/navigation';
-import { toast } from 'sonner';
 
 function HomeContent() {
   const [results, setResults] = useState<{ virusTotalData: unknown; gptSummary: string; score: number } | null>(null);
