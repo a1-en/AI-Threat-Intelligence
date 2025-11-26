@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
-import Link from 'next/link';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
