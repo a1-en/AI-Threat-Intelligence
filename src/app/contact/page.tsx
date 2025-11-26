@@ -83,11 +83,11 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       {/* Header */}
-      <div className="bg-gray-900/50 backdrop-blur-lg border-b border-gray-800">
+      {/* <div className="bg-gray-900/50 backdrop-blur-lg border-b border-gray-800">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-bold text-white hover:text-blue-400 transition-colors">
-              AI Threat Intelligence
+              AI Threat Intelligenc
             </Link>
             <nav className="hidden md:flex space-x-8">
               <Link href="/features" className="text-gray-300 hover:text-white transition-colors">Features</Link>
@@ -97,7 +97,7 @@ export default function ContactPage() {
             </nav>
           </div>
         </div>
-      </div>
+      </div> */}
 
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-16 text-center">
