@@ -30,7 +30,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 pb-12">
       {/* Dashboard Header */}
-      <div className="bg-gray-900/50 border-b border-gray-800 sticky top-[72px] z-40 backdrop-blur-md">
+      <div className="bg-gray-900/50 sticky top-[72px] z-40 backdrop-blur-md">
         <div className="container mx-auto px-4 py-6">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
@@ -129,8 +129,8 @@ function ThreatTicker() {
             <span className="text-blue-400 font-bold tracking-tighter">[INTEL-RECV]</span>
             <span className="text-gray-300">{threat.type} detected at {threat.target}</span>
             <span className={`font-bold ${threat.severity === 'Critical' ? 'text-red-500' :
-                threat.severity === 'High' ? 'text-orange-500' :
-                  'text-yellow-500'
+              threat.severity === 'High' ? 'text-orange-500' :
+                'text-yellow-500'
               }`}>({threat.severity})</span>
           </div>
         ))}
@@ -152,6 +152,7 @@ function StatusItem({ label, status, color }: { label: string, status: string, c
 }
 
 function RecentActivity({ userId }: { userId: string }) {
+  const router = useRouter();
   const [lookups, setLookups] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -240,7 +241,10 @@ function RecentActivity({ userId }: { userId: string }) {
                 })}
               </td>
               <td className="px-8 py-5 text-right">
-                <button className="p-2 text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all">
+                <button
+                  onClick={() => router.push(`/analysis/${lookup._id}`)}
+                  className="p-2 text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
+                >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />

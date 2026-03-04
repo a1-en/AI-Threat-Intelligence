@@ -77,9 +77,9 @@ export async function POST(req: Request) {
       },
     };
     let vtResponse;
+    let vtRelatedData: any = {};
 
     if (queryType === 'url') {
-      // For URLs, need to submit the URL for analysis first, then get the report
       const submitResp = await axios.post(
         'https://www.virustotal.com/api/v3/urls',
         new URLSearchParams({ url: query }),
@@ -91,15 +91,33 @@ export async function POST(req: Request) {
     } else if (queryType === 'domain') {
       vtUrl = `https://www.virustotal.com/api/v3/domains/${query}`;
       vtResponse = await axios.get(vtUrl, vtOptions);
+
+      // Fetch passive DNS (resolutions)
+      try {
+        const resolutions = await axios.get(`${vtUrl}/resolutions?limit=5`, vtOptions);
+        vtRelatedData.resolutions = resolutions.data.data;
+      } catch (e) { console.error('Resolutions fetch failed'); }
     } else if (queryType === 'ip') {
       vtUrl = `https://www.virustotal.com/api/v3/ip_addresses/${query}`;
       vtResponse = await axios.get(vtUrl, vtOptions);
+
+      // Fetch passive DNS (resolutions)
+      try {
+        const resolutions = await axios.get(`${vtUrl}/resolutions?limit=5`, vtOptions);
+        vtRelatedData.resolutions = resolutions.data.data;
+      } catch (e) { console.error('Resolutions fetch failed'); }
     } else if (queryType === 'email') {
       vtUrl = `https://www.virustotal.com/api/v3/search?query=${encodeURIComponent(query)}`;
       vtResponse = await axios.get(vtUrl, vtOptions);
     } else if (queryType === 'hash') {
       vtUrl = `https://www.virustotal.com/api/v3/files/${query}`;
       vtResponse = await axios.get(vtUrl, vtOptions);
+
+      // Fetch comments for hashes
+      try {
+        const comments = await axios.get(`${vtUrl}/comments?limit=3`, vtOptions);
+        vtRelatedData.comments = comments.data.data;
+      } catch (e) { console.error('Comments fetch failed'); }
     } else {
       return NextResponse.json(
         { message: 'Unsupported query type' },
@@ -107,17 +125,17 @@ export async function POST(req: Request) {
       );
     }
 
-    // Generate AI summary
+    // Generate AI summary - Include related data for context
     const gptResponse = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
-          content: "You are a cybersecurity expert. Analyze the following threat intelligence data and provide a clear, concise summary in natural language. Focus on the key findings and potential risks."
+          content: "You are a cybersecurity expert. Analyze the following threat intelligence data (including raw reports and related entities like passive DNS or comments) and provide a clear, concise summary. Focus on if the target is safe or malicious and explain why."
         },
         {
           role: "user",
-          content: JSON.stringify(vtResponse.data)
+          content: JSON.stringify({ main: vtResponse.data, related: vtRelatedData })
         }
       ],
     });
@@ -134,20 +152,27 @@ export async function POST(req: Request) {
       }
     }
 
+    const resultData = {
+      score,
+      virusTotalData: vtResponse.data,
+      relatedData: vtRelatedData,
+      gptSummary,
+      queryType,
+      query
+    };
+
     // Store lookup in database
     const lookup = await Lookup.create({
       userId,
       query,
       queryType,
       score,
-      virusTotalData: vtResponse.data,
+      virusTotalData: resultData, // Store the enhanced data
       gptSummary,
     });
 
     return NextResponse.json({
-      score,
-      virusTotalData: vtResponse.data,
-      gptSummary,
+      ...resultData,
       lookupId: lookup._id,
     });
   } catch (error) {
@@ -157,4 +182,4 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
-} 
+}

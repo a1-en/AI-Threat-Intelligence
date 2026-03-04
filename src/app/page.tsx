@@ -6,9 +6,28 @@ import { ThreatResults } from "@/components/ThreatResults";
 
 import { useSearchParams } from 'next/navigation';
 
+import { useRouter } from "next/navigation";
+
 function HomeContent() {
-  const [results, setResults] = useState<{ virusTotalData: unknown; gptSummary: string; score: number } | null>(null);
+  const router = useRouter();
+  const [results, setResults] = useState<{
+    virusTotalData: any;
+    relatedData?: any;
+    gptSummary: string;
+    score: number;
+    queryType: string;
+    query: string;
+    lookupId?: string;
+  } | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const handleResults = (data: any) => {
+    if (data.lookupId) {
+      router.push(`/analysis/${data.lookupId}`);
+    } else {
+      setResults(data);
+    }
+  };
   const searchParams = useSearchParams();
   const loginSuccess = searchParams?.get('login');
 
@@ -34,7 +53,7 @@ function HomeContent() {
       </div>
       <div className="w-full bg-gray-800/60 backdrop-blur-lg rounded-2xl border border-gray-700/40 shadow-2xl p-8 space-y-6">
         <ThreatInputForm
-          onResults={setResults}
+          onResults={handleResults}
           onLoading={setLoading}
         />
         {loading && (

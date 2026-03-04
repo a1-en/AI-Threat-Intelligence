@@ -7,7 +7,15 @@ import { toast } from 'sonner';
 type QueryType = 'ip' | 'domain' | 'hash' | 'url';
 
 interface ThreatInputFormProps {
-  onResults: (results: { virusTotalData: unknown; gptSummary: string; score: number }) => void;
+  onResults: (results: {
+    virusTotalData: any;
+    relatedData?: any;
+    gptSummary: string;
+    score: number;
+    queryType: string;
+    query: string;
+    lookupId?: string;
+  }) => void;
   onLoading: (loading: boolean) => void;
 }
 
