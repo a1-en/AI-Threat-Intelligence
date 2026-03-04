@@ -1,67 +1,43 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+
+interface Feature {
+  title: string;
+  description: string;
+  icon: string;
+  highlights: string[];
+}
+
+interface FeatureData {
+  intelligence: Feature[];
+  security: Feature[];
+  compliance: Feature[];
+}
 
 export default function FeaturesPage() {
   const [activeTab, setActiveTab] = useState('intelligence');
+  const [features, setFeatures] = useState<FeatureData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const features = {
-    intelligence: [
-      {
-        title: 'AI-Powered Analysis',
-        description: 'Advanced machine learning algorithms analyze threats in real-time with 99.9% accuracy',
-        icon: '🧠',
-        highlights: ['Real-time threat detection', 'Behavioral analysis', 'Pattern recognition', 'Predictive insights']
-      },
-      {
-        title: 'Multi-Source Intelligence',
-        description: 'Aggregate data from VirusTotal, threat feeds, and proprietary databases',
-        icon: '🔍',
-        highlights: ['VirusTotal integration', 'Threat feed aggregation', 'OSINT collection', 'Dark web monitoring']
-      },
-      {
-        title: 'Threat Scoring',
-        description: 'Advanced scoring system that evaluates risk levels from 0-100',
-        icon: '📊',
-        highlights: ['Risk assessment', 'Threat categorization', 'Severity levels', 'Trend analysis']
+  useEffect(() => {
+    async function fetchFeatures() {
+      try {
+        const res = await fetch('/api/features');
+        const data = await res.json();
+        setFeatures(data);
+      } catch (err) {
+        console.error('Failed to fetch features', err);
+      } finally {
+        setLoading(false);
       }
-    ],
-    security: [
-      {
-        title: 'Real-time Monitoring',
-        description: 'Continuous monitoring of IPs, domains, and files for emerging threats',
-        icon: '🛡️',
-        highlights: ['24/7 surveillance', 'Instant alerts', 'Threat hunting', 'Incident response']
-      },
-      {
-        title: 'Advanced Analytics',
-        description: 'Comprehensive dashboards and reporting for security teams',
-        icon: '📈',
-        highlights: ['Custom dashboards', 'Historical data', 'Trend analysis', 'Export capabilities']
-      },
-      {
-        title: 'API Integration',
-        description: 'RESTful API for seamless integration with existing security tools',
-        icon: '🔌',
-        highlights: ['REST API', 'Webhook support', 'SDK libraries', 'Custom integrations']
-      }
-    ],
-    compliance: [
-      {
-        title: 'Audit Trails',
-        description: 'Complete logging and compliance reporting for regulatory requirements',
-        icon: '📋',
-        highlights: ['Activity logging', 'Compliance reports', 'Data retention', 'GDPR compliance']
-      },
-      {
-        title: 'Role-based Access',
-        description: 'Granular permissions and access control for enterprise teams',
-        icon: '👥',
-        highlights: ['User management', 'Permission levels', 'SSO integration', 'MFA support']
-      }
-    ]
-  };
+    }
+    fetchFeatures();
+  }, []);
+
+  if (loading) return <div className="min-h-screen bg-gray-950 flex items-center justify-center text-blue-500">Loading Features...</div>;
+  if (!features) return <div className="min-h-screen bg-gray-950 flex items-center justify-center text-red-500">Failed to load features.</div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
@@ -76,7 +52,7 @@ export default function FeaturesPage() {
         <p className="text-xl text-gray-400 max-w-3xl mx-auto mb-12">
           Discover how our AI-powered platform revolutionizes threat intelligence with cutting-edge technology and comprehensive security solutions.
         </p>
-        
+
         {/* Tab Navigation */}
         <div className="flex justify-center mb-12">
           <div className="bg-gray-800/50 rounded-lg p-1 backdrop-blur-sm">
@@ -84,11 +60,10 @@ export default function FeaturesPage() {
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${
-                  activeTab === tab
-                    ? 'bg-blue-600 text-white shadow-lg'
-                    : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
-                }`}
+                className={`px-6 py-3 rounded-md font-medium transition-all duration-200 ${activeTab === tab
+                  ? 'bg-blue-600 text-white shadow-lg'
+                  : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
+                  }`}
               >
                 {tab === 'intelligence' && 'Intelligence'}
                 {tab === 'security' && 'Security'}
@@ -102,7 +77,7 @@ export default function FeaturesPage() {
       {/* Features Grid */}
       <div className="container mx-auto px-4 pb-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features[activeTab as keyof typeof features].map((feature, index) => (
+          {features[activeTab as keyof FeatureData].map((feature: Feature, index: number) => (
             <div
               key={index}
               className="bg-gray-800/40 backdrop-blur-lg rounded-xl border border-gray-700/50 p-8 hover:border-blue-500/50 transition-all duration-300 hover:transform hover:scale-105"
@@ -111,7 +86,7 @@ export default function FeaturesPage() {
               <h3 className="text-xl font-bold text-white mb-3">{feature.title}</h3>
               <p className="text-gray-400 mb-6">{feature.description}</p>
               <ul className="space-y-2">
-                {feature.highlights.map((highlight, idx) => (
+                {feature.highlights.map((highlight: string, idx: number) => (
                   <li key={idx} className="flex items-center text-sm text-gray-300">
                     <svg className="w-4 h-4 text-green-400 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />

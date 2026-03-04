@@ -4,6 +4,7 @@ import './globals.css';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
 import Navigation from '@/components/Navigation';
+import Footer from '@/components/Footer';
 import { Toaster } from 'sonner';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -20,7 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.className} min-h-screen flex flex-col bg-gray-950 text-gray-100`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
@@ -29,8 +30,11 @@ export default function RootLayout({
         >
           <AuthProvider>
             <Navigation />
-            {children}
-            <Toaster 
+            <main className="flex-grow">
+              {children}
+            </main>
+            <Footer />
+            <Toaster
               position="top-right"
               richColors
               closeButton
