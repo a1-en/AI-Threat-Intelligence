@@ -94,18 +94,37 @@ export async function POST(req: Request) {
 
       // Fetch passive DNS (resolutions)
       try {
-        const resolutions = await axios.get(`${vtUrl}/resolutions?limit=5`, vtOptions);
+        const resolutions = await axios.get(`${vtUrl}/resolutions?limit=10`, vtOptions);
         vtRelatedData.resolutions = resolutions.data.data;
       } catch (e) { console.error('Resolutions fetch failed'); }
+
+      // Fetch subdomains
+      try {
+        const subdomains = await axios.get(`${vtUrl}/subdomains?limit=10`, vtOptions);
+        vtRelatedData.subdomains = subdomains.data.data;
+      } catch (e) { console.error('Subdomains fetch failed'); }
+
+      // Fetch communicating files
+      try {
+        const files = await axios.get(`${vtUrl}/communicating_files?limit=5`, vtOptions);
+        vtRelatedData.communicating_files = files.data.data;
+      } catch (e) { console.error('Communicating files fetch failed'); }
+
     } else if (queryType === 'ip') {
       vtUrl = `https://www.virustotal.com/api/v3/ip_addresses/${query}`;
       vtResponse = await axios.get(vtUrl, vtOptions);
 
       // Fetch passive DNS (resolutions)
       try {
-        const resolutions = await axios.get(`${vtUrl}/resolutions?limit=5`, vtOptions);
+        const resolutions = await axios.get(`${vtUrl}/resolutions?limit=10`, vtOptions);
         vtRelatedData.resolutions = resolutions.data.data;
       } catch (e) { console.error('Resolutions fetch failed'); }
+
+      // Fetch communicating files
+      try {
+        const files = await axios.get(`${vtUrl}/communicating_files?limit=10`, vtOptions);
+        vtRelatedData.communicating_files = files.data.data;
+      } catch (e) { console.error('Communicating files fetch failed'); }
     } else if (queryType === 'email') {
       vtUrl = `https://www.virustotal.com/api/v3/search?query=${encodeURIComponent(query)}`;
       vtResponse = await axios.get(vtUrl, vtOptions);
@@ -115,7 +134,7 @@ export async function POST(req: Request) {
 
       // Fetch comments for hashes
       try {
-        const comments = await axios.get(`${vtUrl}/comments?limit=3`, vtOptions);
+        const comments = await axios.get(`${vtUrl}/comments?limit=5`, vtOptions);
         vtRelatedData.comments = comments.data.data;
       } catch (e) { console.error('Comments fetch failed'); }
     } else {

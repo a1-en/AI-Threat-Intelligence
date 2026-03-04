@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { Doughnut } from 'react-chartjs-2';
+import { ThreatGraph } from './ThreatGraph';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -163,6 +164,9 @@ export function ThreatResults({ results }: ThreatResultsProps) {
           </div>
         </div>
       </div>
+
+      {/* Network Relationship Graph */}
+      <ThreatGraph results={results} />
 
       {/* Enhanced Features: Passive DNS or Community Comments */}
       {results.relatedData && (
