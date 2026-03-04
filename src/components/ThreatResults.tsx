@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import { Doughnut } from 'react-chartjs-2';
 import { ThreatGraph } from './ThreatGraph';
+import { toast } from 'sonner';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -91,21 +92,21 @@ export function ThreatResults({ results }: ThreatResultsProps) {
   };
 
   return (
-    <div className="space-y-8 max-w-4xl mx-auto p-6 bg-gray-900/40 backdrop-blur-md rounded-2xl border border-gray-800 shadow-2xl">
-      <div className="flex justify-between items-center bg-gray-800/20 p-4 rounded-xl">
-        <div>
-          <h3 className="text-xl font-bold text-white flex items-center gap-2">
-            <span className="p-1.5 bg-blue-600/20 rounded text-blue-400">
+    <div className="space-y-6 md:space-y-8 max-w-4xl mx-auto p-4 md:p-6 bg-gray-900/40 backdrop-blur-md rounded-2xl border border-gray-800 shadow-2xl">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-800/20 p-4 rounded-xl gap-4">
+        <div className="min-w-0 w-full sm:w-auto">
+          <h3 className="text-lg md:text-xl font-bold text-white flex items-center gap-2">
+            <span className="p-1.5 bg-blue-600/20 rounded text-blue-400 shrink-0">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04kM12 20.944a11.955 11.955 0 01-8.618-3.04M12 20.944a11.955 11.955 0 008.618-3.04" />
               </svg>
             </span>
-            Intel Report: <span className="font-mono text-blue-400">{results.query}</span>
+            <span className="truncate">Intel Report: <span className="font-mono text-blue-400">{results.query}</span></span>
           </h3>
-          <p className="text-sm text-gray-400 mt-1 uppercase tracking-widest font-semibold">{results.queryType} Investigation</p>
+          <p className="text-[10px] md:text-sm text-gray-400 mt-1 uppercase tracking-widest font-semibold">{results.queryType} Investigation</p>
         </div>
-        <div className="flex flex-col items-end gap-3">
-          <label className="flex items-center gap-2 text-xs text-gray-500 cursor-pointer hover:text-gray-300">
+        <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-4 w-full sm:w-auto">
+          <label className="flex items-center gap-2 text-[10px] md:text-xs text-gray-500 cursor-pointer hover:text-gray-300 whitespace-nowrap">
             <input
               type="checkbox"
               checked={includeRawData}
@@ -117,50 +118,50 @@ export function ThreatResults({ results }: ThreatResultsProps) {
           <button
             onClick={handleDownloadPDF}
             disabled={isGeneratingPDF}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95 disabled:opacity-50"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 md:px-5 py-2 md:py-2.5 rounded-xl text-sm md:text-base font-bold transition-all flex items-center gap-2 shadow-lg shadow-blue-500/20 active:scale-95 disabled:opacity-50"
           >
-            {isGeneratingPDF ? <span className="animate-spin text-xl">◌</span> :
+            {isGeneratingPDF ? <span className="animate-spin text-lg md:text-xl">◌</span> :
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
             }
-            {isGeneratingPDF ? 'Generating...' : 'Export PDF'}
+            <span className="whitespace-nowrap">{isGeneratingPDF ? 'Generating...' : 'Export PDF'}</span>
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Threat Score Card */}
-        <div className="bg-gray-800/30 rounded-3xl p-8 border border-gray-800 flex flex-col items-center">
-          <h4 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-6">Threat Intensity</h4>
-          <div className="relative w-48 h-48">
+        <div className="bg-gray-800/30 rounded-3xl p-6 md:p-8 border border-gray-800 flex flex-col items-center">
+          <h4 className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-widest mb-6">Threat Intensity</h4>
+          <div className="relative w-40 h-40 md:w-48 md:h-48">
             <Doughnut
               ref={chartRef}
               data={chartData}
               options={{ maintainAspectRatio: false, plugins: { legend: { display: false } }, cutout: '80%' }}
             />
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className={`text-4xl font-black ${results.score >= 70 ? 'text-red-500' : results.score >= 30 ? 'text-yellow-500' : 'text-green-500'}`}>
+              <span className={`text-3xl md:text-4xl font-black ${results.score >= 70 ? 'text-red-500' : results.score >= 30 ? 'text-yellow-500' : 'text-green-500'}`}>
                 {results.score}%
               </span>
-              <span className="text-[10px] uppercase font-bold text-gray-500 tracking-tighter">Certainty Score</span>
+              <span className="text-[9px] md:text-[10px] uppercase font-bold text-gray-500 tracking-tighter">Certainty Score</span>
             </div>
           </div>
-          <div className="flex gap-4 mt-8">
-            <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500"></span><span className="text-[10px] text-gray-500 font-bold">CLEAN</span></div>
-            <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-yellow-500"></span><span className="text-[10px] text-gray-500 font-bold">SUSPICIOUS</span></div>
-            <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-red-500"></span><span className="text-[10px] text-gray-500 font-bold">MALICIOUS</span></div>
+          <div className="flex flex-wrap justify-center gap-3 md:gap-4 mt-8">
+            <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-green-500"></span><span className="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase">Clean</span></div>
+            <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-yellow-500"></span><span className="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase">Suspicious</span></div>
+            <div className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-red-500"></span><span className="text-[9px] md:text-[10px] text-gray-500 font-bold uppercase">Malicious</span></div>
           </div>
         </div>
 
         {/* AI Insight Card */}
-        <div className="bg-gray-800/30 rounded-3xl p-8 border border-gray-800 flex flex-col">
-          <h4 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Executive Summary</h4>
-          <div className="bg-blue-500/5 border-l-4 border-blue-500 p-4 rounded-r-xl flex-1 max-h-[350px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-800">
-            <p className="text-gray-200 text-sm leading-relaxed">{results.gptSummary}</p>
+        <div className="bg-gray-800/30 rounded-3xl p-6 md:p-8 border border-gray-800 flex flex-col">
+          <h4 className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-widest mb-4">Executive Summary</h4>
+          <div className="bg-blue-500/5 border-l-4 border-blue-500 p-4 rounded-r-xl flex-1 max-h-[300px] md:max-h-[350px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-800">
+            <p className="text-gray-200 text-sm leading-relaxed whitespace-pre-line">{results.gptSummary}</p>
           </div>
-          <div className="mt-4 flex items-center gap-2 text-[10px] text-blue-400 font-bold">
-            <span className="animate-pulse">●</span> AI ANALYSIS ENGINE V2.1
+          <div className="mt-4 flex items-center gap-2 text-[9px] md:text-[10px] text-blue-400 font-bold">
+            <span className="animate-pulse text-xs">●</span> AI ANALYSIS ENGINE V2.1
           </div>
         </div>
       </div>
@@ -173,16 +174,16 @@ export function ThreatResults({ results }: ThreatResultsProps) {
         <div className="grid grid-cols-1 gap-8">
           {/* Resolutions (Passive DNS) */}
           {results.relatedData.resolutions && results.relatedData.resolutions.length > 0 && (
-            <div className="bg-gray-800/20 rounded-3xl p-8 border border-gray-800">
-              <h4 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+            <div className="bg-gray-800/20 rounded-3xl p-6 md:p-8 border border-gray-800">
+              <h4 className="text-xs md:text-sm font-bold text-white mb-4 flex items-center gap-2">
                 <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                 Passive DNS History
               </h4>
               <div className="space-y-3">
-                {results.relatedData.resolutions.map((res: any, i: number) => (
-                  <div key={i} className="flex justify-between items-center bg-gray-900/40 p-3 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all">
-                    <span className="font-mono text-sm text-gray-300">{res.attributes.ip_address || res.attributes.host_name}</span>
-                    <span className="text-[10px] text-gray-500 font-mono">{new Date(res.attributes.date * 1000).toLocaleDateString()}</span>
+                {results.relatedData.resolutions.slice(0, 10).map((res: any, i: number) => (
+                  <div key={i} className="flex flex-col sm:flex-row justify-between sm:items-center bg-gray-900/40 p-3 rounded-xl border border-gray-800 hover:border-blue-500/30 transition-all gap-2">
+                    <span className="font-mono text-xs md:text-sm text-gray-300 break-all">{res.attributes.ip_address || res.attributes.host_name}</span>
+                    <span className="text-[9px] md:text-[10px] text-gray-500 font-mono sm:text-right">{new Date(res.attributes.date * 1000).toLocaleDateString()}</span>
                   </div>
                 ))}
               </div>
@@ -191,16 +192,18 @@ export function ThreatResults({ results }: ThreatResultsProps) {
 
           {/* Community Comments */}
           {results.relatedData.comments && results.relatedData.comments.length > 0 && (
-            <div className="bg-gray-800/20 rounded-3xl p-8 border border-gray-800">
-              <h4 className="text-sm font-bold text-white mb-4 flex items-center gap-2">
+            <div className="bg-gray-800/20 rounded-3xl p-6 md:p-8 border border-gray-800">
+              <h4 className="text-xs md:text-sm font-bold text-white mb-4 flex items-center gap-2">
                 <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" /></svg>
                 Community Intelligence
               </h4>
-              <div className="space-y-4">
-                {results.relatedData.comments.map((comment: any, i: number) => (
-                  <div key={i} className="bg-purple-500/[0.03] border border-purple-500/10 p-4 rounded-2xl relative">
-                    <div className="text-[10px] text-purple-400 font-bold mb-2 uppercase tracking-tighter">ANONYMOUS RESEARCHER</div>
-                    <p className="text-gray-400 text-xs italic line-clamp-3">"{comment.attributes.text}"</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {results.relatedData.comments.slice(0, 6).map((comment: any, i: number) => (
+                  <div key={i} className="bg-purple-500/[0.03] border border-purple-500/10 p-4 rounded-2xl flex flex-col justify-between">
+                    <div>
+                      <div className="text-[9px] text-purple-400 font-bold mb-2 uppercase tracking-tighter">ANONYMOUS RESEARCHER</div>
+                      <p className="text-gray-400 text-[11px] md:text-xs italic leading-relaxed line-clamp-4">"{comment.attributes.text}"</p>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -214,10 +217,16 @@ export function ThreatResults({ results }: ThreatResultsProps) {
         <div className="flex items-center justify-between mb-4">
           <h4 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Extended Metadata</h4>
           <button
-            onClick={() => navigator.clipboard.writeText(JSON.stringify(results.virusTotalData, null, 2))}
-            className="text-[10px] font-bold text-blue-500 hover:text-blue-400 transition-colors uppercase tracking-widest"
+            onClick={() => {
+              navigator.clipboard.writeText(JSON.stringify(results.virusTotalData, null, 2));
+              toast.success('Metadata copied to clipboard');
+            }}
+            className="p-2 text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"
+            title="Copy JSON Object"
           >
-            Copy Object
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
           </button>
         </div>
         <pre className="bg-black/40 p-5 rounded-xl overflow-auto max-h-64 text-[11px] text-gray-500 font-mono scrollbar-thin scrollbar-thumb-gray-800">

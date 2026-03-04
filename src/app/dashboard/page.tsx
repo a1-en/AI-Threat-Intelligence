@@ -70,23 +70,23 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-950 text-gray-100 pb-12">
       {/* Dashboard Header */}
-      <div className="bg-gray-900/50 sticky top-[72px] z-40 backdrop-blur-md">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="bg-gray-900/50 sticky top-[64px] md:top-[72px] z-40 backdrop-blur-md border-b border-gray-800/50">
+        <div className="container mx-auto px-4 py-4 md:py-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div>
               <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
                 Security Command Center
               </h1>
               <p className="text-gray-400 mt-1 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                System Operational - Protecting {session.user.email}
+                System Operational - Protecting <span className="text-white font-semibold capitalize">{session.user.name || session.user.email}</span>
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap md:flex-nowrap gap-3 w-full md:w-auto">
               <button
                 onClick={handleExportDashboard}
                 disabled={isExporting}
-                className="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-xl transition-all duration-300 border border-gray-700 active:scale-95 flex items-center gap-2 disabled:opacity-50"
+                className="flex-1 md:flex-none px-4 md:px-6 py-2.5 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-xl transition-all duration-300 border border-gray-700 active:scale-95 flex items-center justify-center gap-2 disabled:opacity-50 text-sm md:text-base"
               >
                 {isExporting ? <span className="animate-spin">◌</span> :
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,7 +97,7 @@ export default function DashboardPage() {
               </button>
               <button
                 onClick={() => router.push('/')}
-                className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/20 active:scale-95 flex items-center gap-2"
+                className="flex-1 md:flex-none px-4 md:px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/20 active:scale-95 flex items-center justify-center gap-2 text-sm md:text-base"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -115,10 +115,10 @@ export default function DashboardPage() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
 
           {/* Left Column: Stats & System Health */}
-          <div className="lg:col-span-1 space-y-6">
-            <div className="bg-gray-900/40 border border-gray-800 rounded-2xl p-6">
-              <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">System Status</h3>
-              <div className="space-y-4">
+          <div className="lg:col-span-1 space-y-4 md:space-y-6">
+            <div className="bg-gray-900/40 border border-gray-800 rounded-xl md:rounded-2xl p-4 md:p-6">
+              <h3 className="text-[10px] md:text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">System Status</h3>
+              <div className="space-y-3 md:space-y-4">
                 <StatusItem label="AI Engine" status="Online" color="bg-green-500" />
                 <StatusItem label="Database" status="Connected" color="bg-green-500" />
                 <StatusItem label="API Node" status="Optimized" color="bg-blue-500" />
@@ -126,29 +126,29 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-600/10 to-purple-600/10 border border-blue-500/20 rounded-2xl p-6">
-              <h3 className="text-white font-bold mb-2">Pro Protection</h3>
-              <p className="text-gray-400 text-sm mb-4">Real-time monitoring and advanced AI analysis is active on your account.</p>
-              <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+            <div className="bg-gradient-to-br from-blue-600/10 to-purple-600/10 border border-blue-500/20 rounded-xl md:rounded-2xl p-4 md:p-6">
+              <h3 className="text-white font-bold mb-1 md:mb-2 text-sm md:text-base">Pro Protection</h3>
+              <p className="text-gray-400 text-[11px] md:text-sm mb-4">Real-time monitoring and advanced AI analysis is active on your account.</p>
+              <div className="h-1.5 md:h-2 bg-gray-800 rounded-full overflow-hidden">
                 <div className="h-full bg-blue-500 w-3/4"></div>
               </div>
-              <p className="text-xs text-gray-500 mt-2">75% of monthly lookups used</p>
+              <p className="text-[10px] text-gray-500 mt-2">75% of monthly lookups used</p>
             </div>
           </div>
 
           {/* Right Column: Main Analytics & Activity */}
           <div className="lg:col-span-3 space-y-8">
-            <div className="bg-gray-900/40 border border-gray-800 rounded-3xl p-8 backdrop-blur-sm">
+            <div className="bg-gray-900/40 border border-gray-800 rounded-2xl md:rounded-3xl p-4 md:p-8 backdrop-blur-sm">
               <Analytics userId={session.user.id} />
             </div>
 
             <div className="bg-gray-900/40 border border-gray-800 rounded-3xl overflow-hidden backdrop-blur-sm">
-              <div className="p-8 border-b border-gray-800 flex justify-between items-center">
+              <div className="p-5 md:p-8 border-b border-gray-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                  <h2 className="text-2xl font-bold">Recent Intelligence</h2>
-                  <p className="text-gray-400 text-sm">Your latest security investigations</p>
+                  <h2 className="text-xl md:text-2xl font-bold">Recent Intelligence</h2>
+                  <p className="text-gray-400 text-xs md:text-sm">Your latest security investigations</p>
                 </div>
-                <button className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">
+                <button className="text-blue-400 hover:text-blue-300 text-xs md:text-sm font-medium transition-colors">
                   View All History
                 </button>
               </div>
@@ -244,39 +244,39 @@ function RecentActivity({ userId }: { userId: string }) {
     <div className="overflow-x-auto">
       <table className="w-full text-left">
         <thead>
-          <tr className="bg-gray-800/20 text-gray-500 text-xs uppercase tracking-widest">
-            <th className="px-8 py-4 font-semibold">Target / Identification</th>
-            <th className="px-6 py-4 font-semibold">Classification</th>
-            <th className="px-6 py-4 font-semibold text-center">Threat Score</th>
-            <th className="px-6 py-4 font-semibold">Timestamp</th>
-            <th className="px-8 py-4 font-semibold text-right">Actions</th>
+          <tr className="bg-gray-800/20 text-gray-500 text-[10px] md:text-xs uppercase tracking-widest whitespace-nowrap">
+            <th className="px-4 md:px-8 py-4 font-semibold">Target / Identification</th>
+            <th className="px-4 py-4 font-semibold hidden md:table-cell">Classification</th>
+            <th className="px-4 py-4 font-semibold text-center">Threat Score</th>
+            <th className="px-4 py-4 font-semibold hidden lg:table-cell">Timestamp</th>
+            <th className="px-4 md:px-8 py-4 font-semibold text-right">Actions</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-800/50">
           {lookups.map((lookup) => (
             <tr key={lookup._id} className="hover:bg-blue-500/[0.02] transition-colors group">
-              <td className="px-8 py-5">
+              <td className="px-4 md:px-8 py-5">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-xl">
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-gray-800 flex items-center justify-center text-lg md:text-xl shrink-0">
                     {lookup.queryType === 'ip' ? '🌐' : lookup.queryType === 'domain' ? '🔗' : '📄'}
                   </div>
-                  <div>
-                    <div className="text-gray-200 font-mono text-sm font-medium">{lookup.query}</div>
-                    <div className="text-xs text-gray-500">Global Scan Active</div>
+                  <div className="min-w-0">
+                    <div className="text-gray-200 font-mono text-xs md:text-sm font-medium truncate max-w-[120px] md:max-w-none">{lookup.query}</div>
+                    <div className="text-[10px] text-gray-400 md:text-gray-500">Global Scan Active</div>
                   </div>
                 </div>
               </td>
-              <td className="px-6 py-5">
-                <span className="px-2.5 py-1 rounded-md text-[10px] font-bold bg-gray-800 text-gray-400 border border-gray-700 uppercase">
+              <td className="px-4 py-5 hidden md:table-cell">
+                <span className="px-2 py-0.5 rounded-md text-[9px] font-bold bg-gray-800 text-gray-400 border border-gray-700 uppercase">
                   {lookup.queryType}
                 </span>
               </td>
-              <td className="px-6 py-5">
+              <td className="px-4 py-5">
                 <div className="flex flex-col items-center">
-                  <span className={`text-lg font-bold ${lookup.score >= 70 ? 'text-red-500' : lookup.score >= 30 ? 'text-yellow-500' : 'text-green-500'}`}>
+                  <span className={`text-sm md:text-lg font-bold ${lookup.score >= 70 ? 'text-red-500' : lookup.score >= 30 ? 'text-yellow-500' : 'text-green-500'}`}>
                     {lookup.score}
                   </span>
-                  <div className="w-12 h-1 bg-gray-800 rounded-full mt-1 overflow-hidden">
+                  <div className="w-8 md:w-12 h-1 bg-gray-800 rounded-full mt-1 overflow-hidden">
                     <div
                       className={`h-full ${lookup.score >= 70 ? 'bg-red-500' : lookup.score >= 30 ? 'bg-yellow-500' : 'bg-green-500'}`}
                       style={{ width: `${lookup.score}%` }}
@@ -284,7 +284,7 @@ function RecentActivity({ userId }: { userId: string }) {
                   </div>
                 </div>
               </td>
-              <td className="px-6 py-5 text-gray-400 text-xs font-medium">
+              <td className="px-4 py-5 text-gray-400 text-[10px] md:text-xs font-medium hidden lg:table-cell">
                 {new Date(lookup.createdAt).toLocaleDateString(undefined, {
                   month: 'short',
                   day: 'numeric',
@@ -292,7 +292,7 @@ function RecentActivity({ userId }: { userId: string }) {
                   minute: '2-digit'
                 })}
               </td>
-              <td className="px-8 py-5 text-right">
+              <td className="px-4 md:px-8 py-5 text-right">
                 <button
                   onClick={() => router.push(`/analysis/${lookup._id}`)}
                   className="p-2 text-gray-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-all"

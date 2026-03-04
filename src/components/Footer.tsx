@@ -6,13 +6,13 @@ export default function Footer() {
     return (
         <footer className="bg-gray-900 border-t border-gray-800 pt-16 pb-8">
             <div className="container mx-auto px-4">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-10 md:gap-12 mb-12">
                     {/* Brand */}
-                    <div className="col-span-1 md:col-span-1">
-                        <Link href="/" className="text-2xl font-bold text-white hover:text-blue-400 transition-colors">
+                    <div className="col-span-2 md:col-span-1">
+                        <Link href="/" className="text-xl md:text-2xl font-bold text-white hover:text-blue-400 transition-colors">
                             AI Threat Intelligence
                         </Link>
-                        <p className="mt-4 text-gray-400 leading-relaxed">
+                        <p className="mt-4 text-gray-400 text-sm md:text-base leading-relaxed">
                             Advanced threat intelligence platform powered by AI. Protecting your digital assets with real-time analysis and predictive insights.
                         </p>
                     </div>
@@ -39,7 +39,7 @@ export default function Footer() {
                     </div>
 
                     {/* Legal */}
-                    <div>
+                    <div className="col-span-2 md:col-span-1">
                         <h4 className="text-white font-semibold mb-6">Legal</h4>
                         <ul className="space-y-4">
                             <li><Link href="/privacy" className="text-gray-400 hover:text-white transition-colors">Privacy Policy</Link></li>

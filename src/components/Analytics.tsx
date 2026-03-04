@@ -53,13 +53,13 @@ export function Analytics({ userId }: AnalyticsProps) {
       setLoading(true);
       setError(null);
       console.log('Fetching analytics for user:', userId);
-      
+
       const response = await fetch(`/api/analytics?timeRange=${timeRange}&userId=${userId}`);
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to fetch analytics');
       }
-      
+
       const data: AnalyticsData = await response.json();
       console.log('Analytics data received:', data);
       setAnalyticsData(data);
@@ -155,13 +155,13 @@ export function Analytics({ userId }: AnalyticsProps) {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-100">Analytics Dashboard</h2>
+    <div className="space-y-6 md:space-y-8">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h2 className="text-xl md:text-2xl font-bold text-gray-100">Analytics Dashboard</h2>
         <select
           value={timeRange}
           onChange={(e) => setTimeRange(e.target.value)}
-          className="bg-gray-700 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full sm:w-auto bg-gray-700 text-gray-200 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
         >
           <option value="7d">Last 7 Days</option>
           <option value="30d">Last 30 Days</option>
@@ -169,28 +169,28 @@ export function Analytics({ userId }: AnalyticsProps) {
         </select>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Summary Cards */}
-        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-          <h3 className="text-gray-400 text-sm mb-2">Total Threats</h3>
-          <p className="text-3xl font-bold text-white">{analyticsData.totalThreats}</p>
-          <p className="text-green-400 text-sm mt-2">
+        <div className="bg-gray-800 rounded-xl p-4 md:p-6 border border-gray-700">
+          <h3 className="text-gray-400 text-xs md:text-sm mb-1 md:mb-2">Total Threats</h3>
+          <p className="text-2xl md:text-3xl font-bold text-white">{analyticsData.totalThreats}</p>
+          <p className="text-green-400 text-[10px] md:text-sm mt-1 md:mt-2">
             {analyticsData.threatChange > 0 ? '+' : ''}{analyticsData.threatChange}% from last period
           </p>
         </div>
 
-        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-          <h3 className="text-gray-400 text-sm mb-2">Average Risk Score</h3>
-          <p className="text-3xl font-bold text-white">{analyticsData.averageRiskScore}%</p>
-          <p className="text-yellow-400 text-sm mt-2">
+        <div className="bg-gray-800 rounded-xl p-4 md:p-6 border border-gray-700">
+          <h3 className="text-gray-400 text-xs md:text-sm mb-1 md:mb-2">Average Risk Score</h3>
+          <p className="text-2xl md:text-3xl font-bold text-white">{analyticsData.averageRiskScore}%</p>
+          <p className="text-yellow-400 text-[10px] md:text-sm mt-1 md:mt-2">
             {analyticsData.riskChange > 0 ? '+' : ''}{analyticsData.riskChange}% from last period
           </p>
         </div>
 
-        <div className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-          <h3 className="text-gray-400 text-sm mb-2">Unique Sources</h3>
-          <p className="text-3xl font-bold text-white">{analyticsData.uniqueSources}</p>
-          <p className="text-blue-400 text-sm mt-2">
+        <div className="bg-gray-800 rounded-xl p-4 md:p-6 border border-gray-700">
+          <h3 className="text-gray-400 text-xs md:text-sm mb-1 md:mb-2">Unique Sources</h3>
+          <p className="text-2xl md:text-3xl font-bold text-white">{analyticsData.uniqueSources}</p>
+          <p className="text-blue-400 text-[10px] md:text-sm mt-1 md:mt-2">
             {analyticsData.sourcesChange > 0 ? '+' : ''}{analyticsData.sourcesChange}% from last period
           </p>
         </div>
