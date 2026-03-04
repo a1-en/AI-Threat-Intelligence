@@ -17,6 +17,46 @@ export default function DashboardPage() {
     }
   }, [status, router]);
 
+  const [isExporting, setIsExporting] = useState(false);
+
+  const handleExportDashboard = async () => {
+    setIsExporting(true);
+    try {
+      // Fetch latest history for the report
+      const res = await fetch(`/api/history?userId=${session?.user?.id}&limit=20`);
+      const data = await res.json();
+
+      const response = await fetch('/api/report/dashboard', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          lookups: data.lookups,
+          email: session?.user?.email,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Export failed');
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Security-Dashboard-Report-${new Date().toISOString().split('T')[0]}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+      toast.success('Dashboard report exported successfully!');
+    } catch (error) {
+      console.error('Export error:', error);
+      toast.error('Failed to export dashboard report');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   if (status === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-950">
@@ -43,6 +83,18 @@ export default function DashboardPage() {
               </p>
             </div>
             <div className="flex gap-3">
+              <button
+                onClick={handleExportDashboard}
+                disabled={isExporting}
+                className="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-xl transition-all duration-300 border border-gray-700 active:scale-95 flex items-center gap-2 disabled:opacity-50"
+              >
+                {isExporting ? <span className="animate-spin">◌</span> :
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                }
+                {isExporting ? 'Exporting...' : 'Export Report'}
+              </button>
               <button
                 onClick={() => router.push('/')}
                 className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all duration-300 shadow-lg shadow-blue-500/20 active:scale-95 flex items-center gap-2"
